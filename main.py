@@ -3,9 +3,6 @@ from sentence_transformers import SentenceTransformer
 import pypdf
 import os
 
-# ==============================
-# STEP 1: Load PDF
-# ==============================
 
 pdf_path = os.path.join(os.getcwd(), "COMPANY HR POLICY HANDBOOK.pdf")
 
@@ -20,9 +17,6 @@ for page in reader.pages:
 
 text = text.replace("\n", " ").strip()
 
-# ==============================
-# STEP 2: Chunking
-# ==============================
 
 CHUNK_SIZE = 1500
 
@@ -33,15 +27,10 @@ chunks = [
 
 print("Total chunks:", len(chunks))
 
-# ==============================
-# STEP 3: Load embedding model
-# ==============================
+
 
 model = SentenceTransformer("all-MiniLM-L6-v2")
 
-# ==============================
-# STEP 4: Initialize ChromaDB
-# ==============================
 
 client = chromadb.Client()
 
@@ -58,9 +47,6 @@ try:
 except:
     pass
 
-# ==============================
-# STEP 5: Store embeddings
-# ==============================
 
 for i, chunk in enumerate(chunks):
 
@@ -74,17 +60,11 @@ for i, chunk in enumerate(chunks):
 
 print("R1 Completed: Stored in ChromaDB")
 
-# ==============================
-# SETTINGS
-# ==============================
 
 TOP_K = 3
 THRESHOLD = 0.6
 
 
-# ==============================
-# STEP 6: Clean sentence extractor
-# ==============================
 
 def extract_relevant_sentence(text, query):
 
@@ -139,9 +119,6 @@ def extract_relevant_sentence(text, query):
     return best_sentence
 
 
-# ==============================
-# STEP 7: Query function
-# ==============================
 
 def check_policy_question(query):
 
@@ -223,10 +200,9 @@ def check_policy_question(query):
         print(documents[i][:150], "...")
 
 
-# ==============================
-# STEP 8: Run program
-# ==============================
+
 
 question = input("\nEnter Employee Question: ")
+
 
 check_policy_question(question)
